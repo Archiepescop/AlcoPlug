@@ -1,0 +1,85 @@
+    using system;
+    using System.Collections.Generic;
+    using Terraria;
+    using TerrariaApi. Server;
+    using TShockAPI
+    namespace AlcoholPlugin
+    {
+    [ApiVersion(2, 1)]
+    public class (AlcoholPligin: TerrariaPlugin)
+    {
+    public override string Name =>
+    "AlcoholCommand";
+    public override string Description => "Adds             commands to alcohol consumption"
+    public AlcoholPligin (Main game): base (game)
+    {
+    }
+    public override void initialize()
+    {
+    Commands.ChatCommands.Add(new
+    Command("AlcoholUse", AlcoholCommand, "alc"))
+    }
+    private void
+    AlcoholCommand (CommandArgs args)
+    {
+    if (args.Parameters.Count<1)
+    {
+    args. User. SendErrorMessage ("Using /alc beer |wine|cognac> [User]")
+    return;
+    }
+    TSPlayer target;
+    if(args.Parametrs.count>1)
+    {
+    if                                     (!args.Player.HasPermission(" AlcoholCommand "))
+    {
+    args.Player.SendErrorMessage("You do not have access to this command.");
+    return;
+    }
+    var         players            =
+    TSPlayer.Find.By.NameOrID(args.Parameters[1]);
+    if (player.Count == 0)     
+    {
+    args.Player.SendErrorMessage("Player not found ");
+    return;
+    }
+    if(players.Count>1)   
+    {
+    args.Player.SendMultipleMatchError(players.Select(p=>p.Name));
+    return;
+    }
+    target = players [0]
+    }
+    else
+    {
+    target = args.Player;
+    }
+    string limb = args.Parameters[0].ToLower();
+    switch(limb) 
+    {
+    case "beer"
+    target.SetBuff(25, 10 * 60);// Кружка пива (Опьянение на 10 минут)    
+    target.SendWarningMessage($"{target.Name}Выпил с тобой пиво");
+    if(target != args.Player)
+    args.Player.SendSuccessMessages($"Вы выпили пиво с {target.Name}");
+    }
+    case "wine"
+    target SetBuff(25, 15 * 60);// Бокал вина (Опьянение на 15 минут)
+    target.SendWarningMessage($"{target.Name}Выпил с тобой вино");
+    if(target != args.Player)
+    args.Player.SendSuccessMessages($"Вы выпили вино с {target.Name}");
+    }
+    case "cognac"
+    target.SetBuff(25, 20 * 60);// Рюмка коньяка, зря вы переборщили (Опьянение на 20 минут) 
+    target.SendWarningMessage($"{target.Name}Выпил с тобой коньяка");
+    if(target != args.Player)
+    args.Player.SendSuccesMessages($"Вы выпили коньяк с {target.Name}");
+    }     
+    default:
+    args.Player.SendErrorMessages("Вы можете выпить:beer|wine|cognac");
+    }
+    }
+    
+     
+       
+        
+    
